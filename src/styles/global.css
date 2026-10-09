@@ -1,0 +1,242 @@
+@import './tokens.css';
+
+/* CSS Reset & Core Baseline */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  background-color: var(--as-bg-base);
+  color: var(--as-text-primary);
+  font-family: var(--as-font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Background Atmosphere */
+body {
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(132, 204, 22, 0.05) 0%, transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.03) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+/* Typography Hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--as-font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--as-text-primary);
+}
+
+code, kbd, pre, .mono {
+  font-family: var(--as-font-mono);
+}
+
+/* Status Badges & Pills */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  border-radius: var(--as-radius-pill);
+  background: var(--as-bg-surface);
+  border: 1px solid var(--as-border-subtle);
+  font-family: var(--as-font-mono);
+  font-size: 12px;
+  color: var(--as-text-secondary);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--as-accent-primary);
+  box-shadow: 0 0 8px var(--as-accent-glow);
+  animation: pulse-dot 2.5s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: var(--as-radius-sm);
+  font-family: var(--as-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.status-pill-success {
+  background: var(--as-status-success-bg);
+  color: var(--as-status-success);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.status-pill-accent {
+  background: var(--as-accent-muted);
+  color: var(--as-accent-primary);
+  border: 1px solid rgba(132, 204, 22, 0.25);
+}
+
+/* Obsidian Card Primitives */
+.card {
+  background: var(--as-bg-surface);
+  border: 1px solid var(--as-border-subtle);
+  border-radius: var(--as-radius-lg);
+  padding: 20px;
+  transition: border-color var(--as-duration-normal) var(--as-ease-snap),
+              box-shadow var(--as-duration-normal) var(--as-ease-snap),
+              transform var(--as-duration-normal) var(--as-ease-snap);
+}
+
+.card:hover {
+  border-color: var(--as-border-strong);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.card-elevated {
+  background: var(--as-bg-elevated);
+}
+
+/* Action Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--as-radius-md);
+  font-family: var(--as-font-body);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  outline: none;
+  transition: all var(--as-duration-fast) var(--as-ease-snap);
+}
+
+.btn-primary {
+  background: var(--as-accent-primary);
+  color: var(--as-accent-text);
+  border-color: var(--as-accent-primary);
+}
+
+.btn-primary:hover {
+  background: var(--as-accent-hover);
+  box-shadow: 0 0 16px var(--as-accent-glow);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--as-bg-elevated);
+  color: var(--as-text-primary);
+  border-color: var(--as-border-strong);
+}
+
+.btn-secondary:hover {
+  background: var(--as-bg-overlay);
+  border-color: var(--as-text-secondary);
+}
+
+/* Floating Command Dock */
+.icon-dock {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--as-radius-pill);
+  background: rgba(18, 18, 22, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--as-border-strong);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+  z-index: 1000;
+}
+
+.tooltip-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.icon-action-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--as-text-secondary);
+  cursor: pointer;
+  transition: all var(--as-duration-fast) var(--as-ease-snap);
+}
+
+.icon-action-btn:hover {
+  background: var(--as-bg-overlay);
+  color: var(--as-accent-primary);
+  border-color: var(--as-border-subtle);
+  transform: translateY(-2px);
+}
+
+.icon-action-btn.active {
+  background: var(--as-accent-muted);
+  color: var(--as-accent-primary);
+  border-color: rgba(132, 204, 22, 0.3);
+}
+
+/* Precision Floating Tooltip */
+.tooltip-bubble {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 5px 10px;
+  background: var(--as-bg-overlay);
+  border: 1px solid var(--as-border-strong);
+  border-radius: var(--as-radius-md);
+  font-size: 11px;
+  font-family: var(--as-font-mono);
+  color: var(--as-text-primary);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease, transform 120ms ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tooltip-wrapper:hover .tooltip-bubble {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.tooltip-kbd {
+  background: var(--as-bg-surface);
+  border: 1px solid var(--as-border-subtle);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 9px;
+  color: var(--as-text-muted);
+}
