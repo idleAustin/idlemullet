@@ -42,7 +42,7 @@ jobs:
           retention-days: 1
 
   deploy:
-    name: Deploy to Production
+    name: Deploy to Cloudflare Edge
     needs: validate
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -68,17 +68,13 @@ jobs:
       - name: Install Doppler CLI
         uses: dopplerhq/cli-action@v3
 
-      # Deploy step: Customize for Cloudflare Workers / Pages or GCP Cloud Run
-      # Secrets are injected directly from Doppler via DOPPLER_TOKEN
-      - name: Deploy Application
+      # Publishes dist/ as a static-assets Worker on idlemullet.com (see wrangler.jsonc).
+      # CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID come from Doppler via DOPPLER_TOKEN.
+      - name: Deploy to Cloudflare Workers
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
         run: |
-          # Option A: Cloudflare Workers
-          # doppler run -- npx --yes wrangler deploy
-          # Option B: GCP Cloud Run
-          # doppler run -- gcloud run deploy my-service --image gcr.io/... --region us-central1
-          echo "Deploying with secrets from Doppler..."
+          doppler run -- npx --yes wrangler deploy
 
       # Tags the version worked out from conventional commits and publishes GitHub release notes
       - name: Tag Release & Publish Notes

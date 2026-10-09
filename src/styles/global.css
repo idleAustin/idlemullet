@@ -20,6 +20,9 @@ html, body, #root {
   overflow-x: hidden;
 }
 
+/* Let the body's atmosphere gradients show through the app root. */
+#root { background-color: transparent; }
+
 /* Background Atmosphere */
 body {
   background-image: 
@@ -239,4 +242,71 @@ code, kbd, pre, .mono {
   border-radius: 3px;
   font-size: 9px;
   color: var(--as-text-muted);
+}
+
+.status-pill .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status-pill-warning {
+  background: var(--as-status-warning-bg);
+  color: var(--as-status-warning);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.status-pill-neutral {
+  background: var(--as-bg-elevated);
+  color: var(--as-text-muted);
+  border: 1px solid var(--as-border-subtle);
+}
+
+.btn { text-decoration: none; }
+.btn-compact { padding: 6px 12px; font-size: 12px; }
+
+/* Keyboard-driven selection ring: the same treatment as :focus-visible, for buttons the arrow keys point at. */
+.btn.is-selected {
+  outline: 2px solid var(--as-accent-primary);
+  outline-offset: 2px;
+}
+.btn-primary.is-selected { background: var(--as-accent-hover); box-shadow: 0 0 16px var(--as-accent-glow); transform: translateY(-1px); }
+.btn-secondary.is-selected { background: var(--as-bg-overlay); border-color: var(--as-text-secondary); }
+
+.kbd-inline {
+  font-family: var(--as-font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+  opacity: 0.6;
+}
+
+.icon-dock-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--as-border-strong);
+  margin: 0 4px;
+}
+
+.icon-action-btn:active {
+  transform: scale(0.95);
+  background: var(--as-accent-muted);
+}
+
+:focus-visible {
+  outline: 2px solid var(--as-accent-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

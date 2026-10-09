@@ -20,7 +20,7 @@ WORKDIR /app
 
 # Copy production dependencies only
 COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --omit=dev && npm cache clean --force
 
 # Copy compiled artifacts from builder and server code
 COPY --from=builder /app/dist ./dist
