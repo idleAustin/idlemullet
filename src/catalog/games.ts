@@ -62,6 +62,24 @@ export const ENTRIES: readonly Entry[] = [
       ['Plays on', 'Desktop · Mobile'],
     ],
   },
+  {
+    kind: 'game',
+    slug: 'idle-smoke',
+    no: '02',
+    title: 'idleSmoke',
+    status: 'live',
+    version: 'v0.3.0',
+    url: 'https://idlemullet.com/idle-smoke',
+    art: '/games/idle-smoke/cover.png',
+    artAlt: 'idleSmoke cover art: a lit cigarette resting over a brushed steel ashtray with ash and stubbed butts',
+    blurb: 'Clock 15-second workplace smoke breaks. Mash drags to burn through butts, clear sector quotas, and climb the corporate ladder.',
+    specs: [
+      ['Genre', 'Workplace break / arcade'],
+      ['Modes', 'Campaign · Smoke Session · Sandbox'],
+      ['Engine', 'TypeScript + Three.js'],
+      ['Plays on', 'Desktop · Mobile'],
+    ],
+  },
   { kind: 'about', slug: 'about.txt', no: '--', title: 'about.txt', group: 'System' },
 ];
 

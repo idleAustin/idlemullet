@@ -25,8 +25,15 @@ const menu = initialState(true);
 const at = (selected: number): SelectorState => ({ ...menu, selected });
 
 describe('the catalog', () => {
-  it('lists idleDistribution first and about.txt last', () => {
+  it('lists idleDistribution first, idleSmoke second, and about.txt last', () => {
     expect(ENTRIES[0]).toMatchObject({ kind: 'game', slug: 'idle-distribution', title: 'idleDistribution' });
+    expect(ENTRIES[1]).toMatchObject({
+      kind: 'game',
+      slug: 'idle-smoke',
+      no: '02',
+      title: 'idleSmoke',
+      url: 'https://idlemullet.com/idle-smoke',
+    });
     expect(ENTRIES.at(-1)?.kind).toBe('about');
   });
 
