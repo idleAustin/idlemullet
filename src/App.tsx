@@ -4,6 +4,7 @@ import { ControlDock } from './components/shell/ControlDock';
 import { SiteFooter } from './components/shell/SiteFooter';
 import { SiteHeader } from './components/shell/SiteHeader';
 import { TerminalWindow } from './components/terminal/TerminalWindow';
+import { useGameVersions } from './hooks/useGameVersions';
 import { useTerminal } from './hooks/useTerminal';
 import { sfx } from './utils/audio';
 import { readFlag, writeFlag } from './utils/prefs';
@@ -16,7 +17,8 @@ const CAPTURED = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '
 
 /** The idlemullet.com homepage: a terminal that lists every game and launches the one you pick. */
 export function App() {
-  const { state, send, handleKey, finishLaunch } = useTerminal(ENTRIES);
+  const entries = useGameVersions(ENTRIES);
+  const { state, send, handleKey, finishLaunch } = useTerminal(entries);
   const [sound, setSound] = useState(sfx.enabled);
   const [phosphor, setPhosphor] = useState(() => readFlag(PHOSPHOR_KEY, true));
 
@@ -60,7 +62,7 @@ export function App() {
         <h1>Business in the front. <em>Idle</em> in the back.</h1>
         <p>Small browser games, built slowly. <span className="hint-keys">Arrow keys to browse, enter to open.</span><span className="hint-touch">Tap a game to open.</span></p>
       </div>
-      <TerminalWindow entries={ENTRIES} state={state} send={send} phosphor={phosphor} onLaunched={finishLaunch} />
+      <TerminalWindow entries={entries} state={state} send={send} phosphor={phosphor} onLaunched={finishLaunch} />
     </main>
     <SiteFooter />
     <ControlDock pressKey={pressKey} sound={sound} toggleSound={toggleSound} phosphor={phosphor} togglePhosphor={togglePhosphor} />

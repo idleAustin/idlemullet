@@ -11,6 +11,7 @@
     "start": "node server/index.js",
     "preview": "vite preview --host 127.0.0.1",
     "version:next": "node scripts/version.mjs",
+    "version:games": "node scripts/game-versions.mjs",
     "test": "vitest run"
   },
   "dependencies": {
