@@ -1,5 +1,43 @@
 /** Everything the homepage terminal lists. Add a game by adding a `GameEntry` here. */
 
+declare const __GAME_VERSIONS__: Record<string, string> | undefined;
+
+const BUILD_GAME_VERSIONS: Readonly<Record<string, string>> =
+  typeof __GAME_VERSIONS__ !== 'undefined' && __GAME_VERSIONS__ ? __GAME_VERSIONS__ : {};
+
+const SEMVER_RE = /^v?(\d+)\.(\d+)\.(\d+)$/;
+
+/** Normalizes `0.4.1` or `v0.4.1` into `v0.4.1`, or returns `null` if invalid. */
+export function normalizeVersion(raw: unknown): string | null {
+  if (typeof raw !== 'string') return null;
+  const match = raw.trim().match(SEMVER_RE);
+  return match ? `v${Number(match[1])}.${Number(match[2])}.${Number(match[3])}` : null;
+}
+
+/** Extracts a valid `vX.Y.Z` string from a `/<slug>/version.json` payload, or `null`. */
+export function parseVersionManifest(payload: unknown): string | null {
+  if (!payload || typeof payload !== 'object') return null;
+  return normalizeVersion((payload as { version?: unknown }).version);
+}
+
+/** Resolves the build-time git version for `slug` stamped by `vite.config.ts`. */
+export function gameVersion(slug: string, fallback = 'v0.1.0'): string {
+  return normalizeVersion(BUILD_GAME_VERSIONS[slug]) ?? fallback;
+}
+
+/** Returns `entries` with any updated game versions applied; preserves array identity when unchanged. */
+export function applyGameVersions(entries: readonly Entry[], versions: Readonly<Record<string, string>>): readonly Entry[] {
+  let changed = false;
+  const next = entries.map(entry => {
+    if (entry.kind !== 'game') return entry;
+    const candidate = normalizeVersion(versions[entry.slug]);
+    if (!candidate || candidate === entry.version) return entry;
+    changed = true;
+    return { ...entry, version: candidate };
+  });
+  return changed ? next : entries;
+}
+
 export type GameStatus = 'live' | 'dev' | 'locked';
 
 export interface GameEntry {
@@ -50,7 +88,7 @@ export const ENTRIES: readonly Entry[] = [
     no: '01',
     title: 'idleDistribution',
     status: 'live',
-    version: 'v0.2.0',
+    version: gameVersion('idle-distribution'),
     url: 'https://idlemullet.com/idle-distribution',
     art: '/games/idle-distribution/cover.png',
     artAlt: 'idleDistribution cover art: a hauler driving a wrapped pallet of cartons',
@@ -68,7 +106,7 @@ export const ENTRIES: readonly Entry[] = [
     no: '02',
     title: 'idleSmoke',
     status: 'live',
-    version: 'v0.3.0',
+    version: gameVersion('idle-smoke'),
     url: 'https://idlemullet.com/idle-smoke',
     art: '/games/idle-smoke/cover.png',
     artAlt: 'idleSmoke cover art: a lit cigarette resting over a brushed steel ashtray with ash and stubbed butts',

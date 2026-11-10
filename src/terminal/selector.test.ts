@@ -1,5 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { ENTRIES, GITHUB_URL, countByStatus, gamesSummary, type Entry, type LockedEntry } from '../catalog/games';
+import {
+  ENTRIES,
+  GITHUB_URL,
+  applyGameVersions,
+  countByStatus,
+  gamesSummary,
+  normalizeVersion,
+  parseVersionManifest,
+  type Entry,
+  type GameEntry,
+  type LockedEntry,
+} from '../catalog/games';
+import { compareSemver, highestSemverTag } from '../../scripts/game-versions.mjs';
 import { actionsFor, commandForKey, initialState, statusLine, step, type Command, type SelectorState } from './selector';
 
 /**
@@ -47,6 +59,35 @@ describe('the catalog', () => {
     expect(countByStatus(SAMPLE)).toEqual({ live: 1, inProgress: 1 });
     expect(gamesSummary(SAMPLE)).toBe('1 live · 1 in progress');
     expect(gamesSummary(ENTRIES)).toBe(`${countByStatus(ENTRIES).live} live`);
+  });
+
+  it('stamps every game with a valid semver from git and applies runtime version.json updates', () => {
+    for (const entry of ENTRIES) {
+      if (entry.kind === 'game') {
+        expect(entry.version).toMatch(/^v\d+\.\d+\.\d+$/);
+      }
+    }
+    expect(normalizeVersion('0.4.1')).toBe('v0.4.1');
+    expect(normalizeVersion('v1.2.3')).toBe('v1.2.3');
+    expect(normalizeVersion('<!doctype html>')).toBeNull();
+    expect(parseVersionManifest({ version: '0.5.0', commit: 'abc1234' })).toBe('v0.5.0');
+    expect(parseVersionManifest({})).toBeNull();
+
+    const updated = applyGameVersions(ENTRIES, { 'idle-smoke': '0.9.1' });
+    const smoke = updated.find((e): e is GameEntry => e.kind === 'game' && e.slug === 'idle-smoke');
+    expect(smoke?.version).toBe('v0.9.1');
+    expect(applyGameVersions(updated, { 'idle-smoke': 'v0.9.1' })).toBe(updated);
+  });
+
+  it('selects the highest semver tag from git ls-remote output', () => {
+    const lsRemote = [
+      'ed32ac4\trefs/tags/v0.1.0',
+      '147fbe1\trefs/tags/v0.4.1',
+      'aed6b69\trefs/tags/v0.2.0',
+      '183ce6d\trefs/tags/v0.10.0',
+    ].join('\n');
+    expect(highestSemverTag(lsRemote)).toBe('v0.10.0');
+    expect(compareSemver('v0.10.0', 'v0.4.1')).toBeGreaterThan(0);
   });
 });
 
